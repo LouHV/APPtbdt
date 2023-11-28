@@ -44,7 +44,13 @@ dependencies {
     //gson
     implementation ("com.google.code.gson:gson:2.10.1")
 
+    //RxJava
+
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation ("io.reactivex.rxjava3:rxjava:3.0.8")
     //Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.1.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0") // Thay 2.9.0 bằng phiên bản Retrofit mới nhất
+    implementation ("com.squareup.retrofit2:adapter-rxjava3:2.9.0") // Thay 2.9.0 bằng phiên bản Adapter mới nhất
+
     implementation ("com.squareup.retrofit2:converter-gson:2.1.0")
 }

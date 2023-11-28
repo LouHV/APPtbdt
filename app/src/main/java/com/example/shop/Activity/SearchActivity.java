@@ -32,19 +32,19 @@ public class SearchActivity extends AppCompatActivity {
             finish();
         });
 
-        ArrayList<PopularDomain> item = new ArrayList<>();
-        item.add(new PopularDomain("Luu hoang viet","ertwertwefgwergsdfgs","pic1",15,20,43));
-        item.add(new PopularDomain("Luu hoang viet2","qertwergdsfbsdf","pic2",10,10,52));
-        item.add(new PopularDomain("Luu hoang viet3wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww","rewtwerfsdvasdfasdf3q34tadgfaqwer","pic3",12,30,453333));
-        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
-        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
-        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
-        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
-        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        recyclerView=findViewById(R.id.rcvSearch);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        productAdapter=new ProductAdapter(item,this);
-        recyclerView.setAdapter(productAdapter);
+//        ArrayList<PopularDomain> item = new ArrayList<>();
+//        item.add(new PopularDomain("Luu hoang viet","ertwertwefgwergsdfgs","pic1",15,20,43));
+//        item.add(new PopularDomain("Luu hoang viet2","qertwergdsfbsdf","pic2",10,10,52));
+//        item.add(new PopularDomain("Luu hoang viet3wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww","rewtwerfsdvasdfasdf3q34tadgfaqwer","pic3",12,30,453333));
+//        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
+//        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
+//        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
+//        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
+//        item.add(new PopularDomain("Luu hoang viet4","rewtwerfsdvasdfasdf3q34tadgfa","pic3",12,30,45));
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+//        recyclerView=findViewById(R.id.rcvSearch);
+//        recyclerView.setLayoutManager(gridLayoutManager);
+//        productAdapter=new ProductAdapter(item,this);
+//        recyclerView.setAdapter(productAdapter);
     }
 }
