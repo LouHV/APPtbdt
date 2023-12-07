@@ -57,7 +57,7 @@
                 android:textColor="#E1A500"/>
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/emailTxt"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
@@ -74,7 +74,7 @@
                 android:textColor="#E1A500"/>
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/passTxt"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
@@ -126,7 +126,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView19"
+                android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

@@ -35,11 +35,10 @@ public class Intro extends AppCompatActivity {
         Button btnSignup = findViewById(R.id.Signup);
         btnLogin.setOnClickListener(v -> {
             startActivity(new Intent(Intro.this, Login.class));
-            finish();
+
         });
         btnSignup.setOnClickListener(v -> {
             startActivity(new Intent(Intro.this,Sigup.class));
-            finish();
         });
     }
 }

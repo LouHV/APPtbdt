@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.shop.Domain.Content;
 import com.example.shop.Domain.PopularDomain;
 import com.example.shop.Helper.ManagmentCart;
 import com.example.shop.R;
@@ -34,22 +35,29 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void getBundle() {
-        object = (PopularDomain) getIntent().getSerializableExtra("object");
-        int drawableResourceId = this.getResources().getIdentifier(object.getPicUrl(), "drawable",this.getPackageName());
+//        object = (PopularDomain) getIntent().getSerializableExtra("chitiet");
+//        int drawableResourceId = this.getResources().getIdentifier(object.getPicUrl(), "drawable",this.getPackageName());
+//        Glide.with(this)
+//                .load(drawableResourceId)
+//                .into(picItem);
+//
+//        titleTxt.setText(object.getTitle());
+//        feeTxt.setText("$"+object.getPrice());
+//        descriptionTxt.setText(object.getDescription());
+//        reviewTxt.setText(object.getReview() + "");
+//        scoreTxt.setText(object.getScore() + "");
+//
+//        addToCartBtn.setOnClickListener(v -> {
+//            object.setNumberinCart(numberOder);
+//            managmentCart.insertFood(object);
+//        });
+        Content content = (Content) getIntent().getSerializableExtra("chitiet");
         Glide.with(this)
-                .load(drawableResourceId)
+                .load("http://10.0.0.87:8080/api/product/getImage/"+content.getId())
                 .into(picItem);
-
-        titleTxt.setText(object.getTitle());
-        feeTxt.setText("$"+object.getPrice());
-        descriptionTxt.setText(object.getDescription());
-        reviewTxt.setText(object.getReview() + "");
-        scoreTxt.setText(object.getScore() + "");
-
-        addToCartBtn.setOnClickListener(v -> {
-            object.setNumberinCart(numberOder);
-            managmentCart.insertFood(object);
-        });
+        titleTxt.setText(content.getName());
+        feeTxt.setText(content.getPrice()+"đ");
+        descriptionTxt.setText(content.getDescription());
         backBtn.setOnClickListener(v -> {
           finish();
         });

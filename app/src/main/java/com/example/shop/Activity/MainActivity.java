@@ -9,12 +9,13 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,23 +33,21 @@ import com.example.shop.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapterPopular;
-    private RecyclerView recyclerViewPopular, rcvListproduct;
-
+    private RecyclerView recyclerView, recyclerViewPopular, rcvListproduct;
+    int page = 1;
 
     private EditText searchTxt;
     private ProductAdapter productAdapter;
+    LinearLayoutManager linearLayoutManager;
+    Handler handler = new Handler();
+    Boolean isLoading = false;
 
-    //    CompositeDisposable compositeDisposable = new CompositeDisposable();
     Api api;
 
     @Override
@@ -64,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         if (isConnected(this)) {
             Toast.makeText(getApplicationContext(), "Đã kết nối với internet", Toast.LENGTH_LONG).show();
             getProduct();
+
         } else {
 
             Toast.makeText(getApplicationContext(), "Không có internet", Toast.LENGTH_LONG).show();
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     }
-
     private void Anhxa() {
         api = RetrofitClient.getInstance().getMyApi();
         //Product
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         //popular
         recyclerViewPopular = findViewById(R.id.view1);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
     }
 
     private void getProduct() {
@@ -90,12 +90,13 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
+
                 List<Content> content = response.body().getContent();
-                for (int i = 0; i < content.size(); i++) {
                     productAdapter = new ProductAdapter((ArrayList<Content>) content);
                     rcvListproduct.setAdapter(productAdapter);
                     productAdapter.notifyDataSetChanged();
-                }
+//                    productAdapter.notifyItemRangeInserted(350,50);
+//                addEventLoad(content);
             }
 
             @Override
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("error", t.getMessage());
             }
         });
+
     }
 
 
