@@ -19,13 +19,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Pofile extends AppCompatActivity {
+public class editProfileActivity extends AppCompatActivity {
     private TextView nameTxt,telTxt,addressTxt,gmailTxt, name;
     private Button logOut;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pofile);
+        setContentView(R.layout.activity_edit_profile);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         anhxa();
         getUser();
@@ -33,14 +33,12 @@ public class Pofile extends AppCompatActivity {
             SharedPreferences preferences = getSharedPreferences("jwt", MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("isLogin",false).commit();
-            editor.clear();
             finish();
             Intent intent = new Intent(this,Login.class);
             startActivity(intent);
 
         });
     }
-
     private void getUser() {
         SharedPreferences preferences = getSharedPreferences("jwt", MODE_PRIVATE);
         String Token = preferences.getString("accessToken","N/A");
@@ -78,7 +76,5 @@ public class Pofile extends AppCompatActivity {
         name = findViewById(R.id.namee);
         logOut = findViewById(R.id.logout);
     }
-
-
 
 }

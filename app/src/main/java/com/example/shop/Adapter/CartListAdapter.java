@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners;
+import com.example.shop.Domain.DetailCart;
 import com.example.shop.Domain.PopularDomain;
 import com.example.shop.Helper.ChangeNumberItemsListener;
 import com.example.shop.Helper.ManagmentCart;
@@ -20,51 +21,50 @@ import com.example.shop.R;
 import java.util.ArrayList;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
-    ArrayList<PopularDomain> listItemSelected;
-    private ManagmentCart managmentCart;
-    ChangeNumberItemsListener changeNumberItemsListener;
+    ArrayList<DetailCart> listItemSelected;
+    Context context;
 
-    public CartListAdapter(ArrayList<PopularDomain> listItemSelected, Context context, ChangeNumberItemsListener changeNumberItemsListener) {
+
+    public CartListAdapter(ArrayList<DetailCart> listItemSelected) {
         this.listItemSelected = listItemSelected;
-        managmentCart = new ManagmentCart(context);
-        this.changeNumberItemsListener = changeNumberItemsListener;
+
     }
 
-    @NonNull
+
     @Override
     public CartListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_cart,parent,false);
+        context = parent.getContext();
         return new ViewHolder(inflate);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CartListAdapter.ViewHolder holder, int position) {
-    holder.title.setText(listItemSelected.get(position).getTitle());
-    holder.feeEachItem.setText("$"+listItemSelected.get(position).getPrice());
-    holder.totalEachItem.setText("$"+Math.round(listItemSelected.get(position).getNumberinCart() * listItemSelected.get(position).getPrice()));
-    holder.num.setText(String.valueOf(listItemSelected.get(position).getNumberinCart()));
+        holder.title.setText(String.valueOf(listItemSelected.get(position).getQuantity()) );
+        holder.feeEachItem.setText("$"+listItemSelected.get(position).getPrice());
+        holder.totalEachItem.setText("$"+Math.round(listItemSelected.get(position).getQuantity() * listItemSelected.get(position).getPrice()));
+        holder.num.setText(String.valueOf(listItemSelected.get(position).getQuantity()));
 
-    int drawableResourceId = holder.itemView.getContext().getResources()
-            .getIdentifier(listItemSelected.get(position).getPicUrl(),"drawable",holder.itemView.getContext().getPackageName());
+
         Glide.with(holder.itemView.getContext())
-                .load(drawableResourceId)
-                .transform(new GranularRoundedCorners(30, 30, 30, 30))
+                .load("http://192.168.1.36:8080/api/product/getImage/"+listItemSelected.get(position).getProductId())
+                .transform(new GranularRoundedCorners(30,30,0,0))
                 .into(holder.pic);
 
-        holder.plusItem.setOnClickListener(v -> {
-                managmentCart.plusNumberItem(listItemSelected, position, () -> {
-                    notifyDataSetChanged();
-                    changeNumberItemsListener.change();
-            });
-
-        });
-        holder.minusItem.setOnClickListener(v -> {
-            managmentCart.minusNumberItem(listItemSelected, position, () -> {
-                notifyDataSetChanged();
-                changeNumberItemsListener.change();
-            });
-
-        });
+//        holder.plusItem.setOnClickListener(v -> {
+//            managmentCart.plusNumberItem(listItemSelected, position, () -> {
+//                notifyDataSetChanged();
+//                changeNumberItemsListener.change();
+//            });
+//
+//        });
+//        holder.minusItem.setOnClickListener(v -> {
+//            managmentCart.minusNumberItem(listItemSelected, position, () -> {
+//                notifyDataSetChanged();
+//                changeNumberItemsListener.change();
+//            });
+//
+//        });
     }
 
     @Override

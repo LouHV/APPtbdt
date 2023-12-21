@@ -1,11 +1,12 @@
 package com.example.shop.Domain;
 
-public class UserResponse {
+import java.io.Serializable;
+
+public class UserResponse implements Serializable {
     private String fullname;
     private String email;
     private String address;
     private String yourphone;
-    private String password;
 
     public String getFullname() {
         return fullname;
@@ -37,13 +38,5 @@ public class UserResponse {
 
     public void setYourphone(String yourphone) {
         this.yourphone = yourphone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

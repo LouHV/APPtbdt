@@ -7,14 +7,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shop.Domain.Jwt;
 import com.example.shop.Domain.RetrofitClient;
 import com.example.shop.Domain.User;
 import com.example.shop.Domain.UserResponse;
@@ -60,16 +63,25 @@ public class Login extends AppCompatActivity {
         return user;
     }
 
+
     public void SigninUser(User user) {
         String Email = emailTxt.getText().toString();
         String Pass = passwordTxt.getText().toString();
         if (validateData(Email, Pass)) {
-            Call<UserResponse> userCall = RetrofitClient.getInstance().getMyApi().SigninUser(user);
-            userCall.enqueue(new Callback<UserResponse>() {
+            Call<Jwt> userCall = RetrofitClient.getInstance().getMyApi().SigninUser(user);
+            userCall.enqueue(new Callback<Jwt>() {
 
                 @Override
-                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                public void onResponse(Call<Jwt> call, Response<Jwt> response) {
                     if (response.isSuccessful()) {
+                        System.out.println("bala"+response.body());
+                        SharedPreferences preferences = getSharedPreferences("jwt", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("accessToken", response.body().getAccessToken());
+                        editor.putString("tokenType",response.body().getTokenType());
+                        editor.putString("email",Email);
+                        editor.putBoolean("isLogin",true).commit();
+                        editor.apply();
                         Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_LONG).show();
                         new Handler().postDelayed(new Runnable() {
                         @Override
@@ -78,14 +90,14 @@ public class Login extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }
-                    }, 1500);
+                    }, 1000);
                     } else {
                             Toast.makeText(Login.this,"Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<UserResponse> call, Throwable t) {
+                public void onFailure(Call<Jwt> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "lỗi call API", Toast.LENGTH_LONG).show();
                     Log.e("error", t.getMessage());
                 }

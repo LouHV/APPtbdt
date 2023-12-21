@@ -31,8 +31,9 @@ import retrofit2.Response;
 public class SearchActivity extends AppCompatActivity {
     private ImageView btnBack;
     private EditText searchText;
-    private RecyclerView recyclerView;
+    private RecyclerView rcvListproduct;
     private ProductAdapter productAdapter;
+    List<Content> contentList;
     Api api;
 
     @Override
@@ -43,10 +44,13 @@ public class SearchActivity extends AppCompatActivity {
         back();
     }
     private void initView(){
+        contentList = new ArrayList<>();
         api = RetrofitClient.getInstance().getMyApi();
         searchText = findViewById((R.id.searchtext));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        recyclerView=findViewById(R.id.rcvSearch);
+        //Product
+        rcvListproduct = findViewById(R.id.rcvSearch);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        rcvListproduct.setLayoutManager(gridLayoutManager);
 //        recyclerView.setLayoutManager(gridLayoutManager);
 //        productAdapter=new ProductAdapter(item,this);
 //        recyclerView.setAdapter(productAdapter);
@@ -59,28 +63,39 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 0) {
+                    contentList.clear();
+                    productAdapter = new ProductAdapter((ArrayList<Content>) contentList);
+                    rcvListproduct.setAdapter(productAdapter);
+                }else {
+                    getProductSearch(s.toString());
+                }
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                getProduct();
+
             }
         });
     }
 
-    private void getProduct() {
-        String str_search = searchText.getText().toString();
+    private void getProductSearch(String str) {
+        contentList.clear();
+//        String str_search = searchText.getText().toString();
 //        api.getProductById(Long.valueOf(str_search));
-        Call<Product> call = api.getProductById(Long.valueOf(str_search));
+        Call<Product> call = api.getProductByName(str);
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
+
                 List<Content> content = response.body().getContent();
-                productAdapter = new ProductAdapter((ArrayList<Content>) content);
-                recyclerView.setAdapter(productAdapter);
-//                productAdapter.notifyDataSetChanged();
-//                    productAdapter.notifyItemRangeInserted(350,50);
+                contentList = content;
+                productAdapter = new ProductAdapter((ArrayList<Content>) contentList);
+                rcvListproduct.setAdapter(productAdapter);
+                productAdapter.notifyDataSetChanged();
+
+//                productAdapter.notifyItemRangeInserted(350,50);
 //                addEventLoad(content);
             }
 

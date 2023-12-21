@@ -3,6 +3,7 @@ package com.example.shop.Helper;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.example.shop.Domain.Content;
 import com.example.shop.Domain.PopularDomain;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Date;
 public class ManagmentCart {
     private Context context;
     private TinyDB tinyDB;
+    private Content content;
 
     public ManagmentCart(Context context) {
         this.context = context;

@@ -2,6 +2,7 @@ package com.example.shop.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -9,13 +10,15 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,10 +27,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.shop.Adapter.PopularListAdapter;
 import com.example.shop.Adapter.ProductAdapter;
 import com.example.shop.Domain.Api;
+import com.example.shop.Domain.Cart;
 import com.example.shop.Domain.Content;
+import com.example.shop.Domain.DetailCart;
 import com.example.shop.Domain.PopularDomain;
 import com.example.shop.Domain.Product;
 import com.example.shop.Domain.RetrofitClient;
+import com.example.shop.Domain.User;
 import com.example.shop.R;
 
 import java.util.ArrayList;
@@ -39,33 +45,35 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapterPopular;
-    private RecyclerView recyclerView, recyclerViewPopular, rcvListproduct;
+    private RecyclerView recyclerViewPopular, rcvListproduct;
+    private ProgressBar progressBar;
+    private TextView count;
     int page = 1;
 
     private EditText searchTxt;
     private ProductAdapter productAdapter;
-    LinearLayoutManager linearLayoutManager;
-    Handler handler = new Handler();
-    Boolean isLoading = false;
+    private ImageView out;
 
     Api api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Anhxa();
         search();
         initRecyclerview();
         bottom_navigation();
+        GetId();
 
         if (isConnected(this)) {
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Đã kết nối với internet", Toast.LENGTH_LONG).show();
+
             getProduct();
 
         } else {
-
+            progressBar.setVisibility(View.VISIBLE);
             Toast.makeText(getApplicationContext(), "Không có internet", Toast.LENGTH_LONG).show();
         }
 
@@ -73,7 +81,34 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     }
+    public void GetId() {
+
+        SharedPreferences preferences = getSharedPreferences("jwt", MODE_PRIVATE);
+        String Token = preferences.getString("accessToken","N/A");
+        String email = preferences.getString("email","N/A");
+        Call<Integer> userCall = RetrofitClient.getInstance().getMyApi().getId("Bearer " + Token,email);
+        userCall.enqueue(new Callback<Integer>() {
+
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                SharedPreferences preferences = getSharedPreferences("jwt", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("userID", response.body().toString()).commit();
+                editor.apply();
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "lỗi call API", Toast.LENGTH_LONG).show();
+                Log.e("error", t.getMessage());
+            }
+        });
+
+
+    }
     private void Anhxa() {
+        progressBar = findViewById(R.id.progressBar);
+
         api = RetrofitClient.getInstance().getMyApi();
         //Product
         rcvListproduct = findViewById(R.id.view2);
@@ -83,6 +118,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewPopular = findViewById(R.id.view1);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+//        // so sp trong gio hang
+        SharedPreferences pre = getSharedPreferences("jwt", MODE_PRIVATE);
+        String counto = pre.getString("countcart","");
+        count = findViewById(R.id.count);
+        if(counto==null){
+            count.setText(0);
+        }else {
+            count.setText(counto);
+        }
+
+
+        out = findViewById(R.id.out);
+        out.setOnClickListener(v -> {
+            Intent intent = new Intent(this,CartActivity.class);
+            startActivity(intent);
+        });
+//        if(carts==null){
+//            carts = new ArrayList<>();
+//        }
     }
 
     private void getProduct() {
@@ -95,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     productAdapter = new ProductAdapter((ArrayList<Content>) content);
                     rcvListproduct.setAdapter(productAdapter);
                     productAdapter.notifyDataSetChanged();
+
 //                    productAdapter.notifyItemRangeInserted(350,50);
 //                addEventLoad(content);
             }
@@ -126,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         });
         cartBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, CartActivity.class));
+
         });
         profileBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, Pofile.class));

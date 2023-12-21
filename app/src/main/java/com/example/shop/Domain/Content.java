@@ -19,6 +19,23 @@ public class Content implements Serializable {
 
     private int quantity;
     private boolean status;
+    private int numberinCart;
+
+    public Content(Long id, String name, int price, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+
+    }
+
+    public int getNumberinCart() {
+        return numberinCart;
+    }
+
+    public void setNumberinCart(int numberinCart) {
+        this.numberinCart = numberinCart;
+    }
 
     public Long getId() {
         return id;

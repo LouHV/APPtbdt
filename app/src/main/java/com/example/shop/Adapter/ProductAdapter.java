@@ -28,8 +28,7 @@ import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewholder>  {
     ArrayList<Content> contents;
-    private static final int VIEW_TYPE_DATA = 0;
-    private static final int VIEW_TYPE_LOADING = 1;
+
     Context context;
     public ProductAdapter(ArrayList<Content> contents) {
 
@@ -50,11 +49,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
             Viewholder viewholder = (Viewholder) holder;
             Content content = contents.get(position);
             viewholder.titleTxt.setText(content.getName());
-            viewholder.feeTxt.setText(String.valueOf(content.getPrice())+" đ");
+            viewholder.feeTxt.setText("$"+String.valueOf(content.getPrice()));
 
 
             Glide.with(viewholder.itemView.getContext())
-                    .load("http://10.0.0.87:8080/api/product/getImage/"+content.getId())
+                    .load("http://192.168.1.36:8080/api/product/getImage/"+content.getId())
                     .transform(new GranularRoundedCorners(30,30,0,0))
                     .into(viewholder.pic);
 
