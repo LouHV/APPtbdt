@@ -53,7 +53,7 @@ public class DetailActivity extends AppCompatActivity {
 //        });
         Content content = (Content) getIntent().getSerializableExtra("chitiet");
         Glide.with(this)
-                .load("http://10.0.0.87:8080/api/product/getImage/"+content.getId())
+                .load("http://192.168.1.4:8080/api/product/getImage/"+content.getId())
                 .into(picItem);
         titleTxt.setText(content.getName());
         feeTxt.setText(content.getPrice()+"đ");

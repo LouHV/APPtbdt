@@ -59,17 +59,12 @@ public class Sigup extends AppCompatActivity {
     }
 
     public void registerUser(User user) {
-        String Email = email.getText().toString();
-        String name = fname.getText().toString();
-        String Address = address.getText().toString();
-        String Phone = phone.getText().toString();
-        String Pass = password.getText().toString();
-        if(validateData(name,Email,Address,Phone,Pass)){
-            Call<UserResponse> userCall = RetrofitClient.getInstance().getMyApi().registerUser(user);
-            userCall.enqueue(new Callback<UserResponse>() {
+        if(validateData(user.getFullname(),user.getEmail(),user.getAddress(),user.getYourphone(),user.getPassword())){
+            Call<String> userCall = RetrofitClient.getInstance().getMyApi().registerUser(user);
+            userCall.enqueue(new Callback<String>() {
 
                 @Override
-                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                public void onResponse(Call<String> call, Response<String> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(Sigup.this, "Đăng kí thành công", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(Sigup.this, Login.class));
@@ -82,7 +77,7 @@ public class Sigup extends AppCompatActivity {
                     }
                 }
                 @Override
-                public void onFailure(Call<UserResponse> call, Throwable t) {
+                public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "lỗi call API", Toast.LENGTH_LONG).show();
                     Log.e("error", t.getMessage());
                 }

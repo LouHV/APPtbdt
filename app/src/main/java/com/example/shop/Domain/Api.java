@@ -13,11 +13,11 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Api {
-    String BASE_URL = "http://10.0.0.87:8080/api/";
+    String BASE_URL = "http://192.168.0.101:8080/api/";
     @GET("product")
     Call<Product> getAllProducts();
     @POST("auth/signup")
-    Call<UserResponse> registerUser(@Body User user);
+    Call<String> registerUser(@Body User user);
     @POST("auth/signin")
     Call<UserResponse> SigninUser(@Body User user);
 

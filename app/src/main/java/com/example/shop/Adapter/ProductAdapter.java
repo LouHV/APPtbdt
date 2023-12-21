@@ -54,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
 
 
             Glide.with(viewholder.itemView.getContext())
-                    .load("http://10.0.0.87:8080/api/product/getImage/"+content.getId())
+                    .load("http://192.168.0.101:8080/api/product/getImage/"+content.getId())
                     .transform(new GranularRoundedCorners(30,30,0,0))
                     .into(viewholder.pic);
 
